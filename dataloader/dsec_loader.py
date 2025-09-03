@@ -8,8 +8,7 @@ import glob
 from torchvision import transforms as tf
 
 from dataloader.augment import ( downsample_spatial, downsample_spatial_mask,
-                               apply_transform_to_field, apply_randomcrop_to_sample, Augmentor)
-from dataloader.representation import VoxelGrid
+                               apply_transform_to_field, apply_randomcrop_to_sample)
 
 
 class DSECfull(data.Dataset):
