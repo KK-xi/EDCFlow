@@ -17,11 +17,12 @@ Pretrained model was saved in
     chekpoints/final_checkpoint.pth.tar
 
 # Required Data
-DSEC datasets and MVSEC datasets:
+DSEC-Flow datasets and MVSEC datasets:
 
 Similar to [TMA](https://github.com/ispc-lab/TMA/tree/main?tab=readme-ov-file#dsec-dataset-preparation), we use pre-generated event volumes and flows saved in .npz files.
 
 # Training
+Take the DSEC-Flow dataset as an example
 
     python DSEC_train_main.py --data_root data_path
     
