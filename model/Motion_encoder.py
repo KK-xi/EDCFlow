@@ -134,7 +134,7 @@ class MEModule2(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv2d(128, 4 * 4 * 9, 1, padding=0))
 
-    def forward(self, x, flow, net0, inp, corr):
+    def forward(self, x, flow, net, inp, corr):
         n, t, c, h, w = x.size()
         x = x.reshape(n*t, c, h, w)
         bottleneck = self.conv1(x)  # nt, c//r, h, w
@@ -149,7 +149,6 @@ class MEModule2(nn.Module):
 
         diff_fea = tPlusone_fea - t_fea  # diff
         diff_fea = rearrange(diff_fea, 'b t c h w -> b c t h w', b=n, h=h, w=w, t=self.n_segment - 1)
-        out_difffea = diff_fea
         hd1 = self.convf1(diff_fea)
         hd1 = hd1.reshape(n, c, h, w)
 
@@ -176,14 +175,13 @@ class MEModule2(nn.Module):
         hd = self.convff(ms_hd)
 
         mf = self.motion_enc(flow, corr)
-        corr_mf = mf
         mf = torch.cat([hd, mf], 1) + self.SKAttn(torch.cat([hd, mf], 1))
         mf = mf.reshape(n, -1, h, w)
 
         inp = torch.cat([mf, inp], 1)
-        net0 = self.update(net0, inp)
+        net = self.update(net, inp)
 
-        dtflow = self.flow_head(net0)
-        mask = self.mask(net0)
+        dtflow = self.flow_head(net)
+        mask = self.mask(net)
 
-        return dtflow, mask, net0, [hd1, hd2, hd3], hd, corr_mf, mf,out_difffea, bottleneck.reshape(n, t, -1, h, w), conv_bottleneck.reshape(n, t, -1, h, w)
+        return dtflow, mask, net
