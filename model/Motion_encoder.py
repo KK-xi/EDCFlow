@@ -5,7 +5,6 @@ from einops import rearrange
 
 from model.aggregate import SmallMotionEncoder, MotionFeatureEncoder
 from model.Attention import SE, MSE
-from model.transformer import FeatureAttention
 
 class ConvGRU(nn.Module):
     def __init__(self, hidden_dim=128, input_dim=192+128):
